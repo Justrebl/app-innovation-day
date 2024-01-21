@@ -8,7 +8,12 @@
     "prompt": "dotnet: ",
     "welcomeBanner": "Welcome to .NET 6!",
     "vscode": {
-      "extensions": ["ms-dotnettools.csharp", "ms-dotnettools.csdevkit"],
+      "extensions": [
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.csdevkit",
+        "azurite.azurite",
+        "ms-vscode.vscode-node-azure-pack"
+      ],
       "settings": { "terminal.integrated.shell.linux": "/bin/bash" }
     },
     "codespaces": {
