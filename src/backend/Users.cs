@@ -36,7 +36,8 @@ namespace backend
                     RowKey = Guid.NewGuid().ToString(),
                     FirstName = "John",
                     LastName = "Doe",
-                    Timestamp = DateTimeOffset.UtcNow},
+                    Timestamp = DateTimeOffset.UtcNow
+                    },
                 Response = response
             }
         }
