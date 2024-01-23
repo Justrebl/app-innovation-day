@@ -99,7 +99,8 @@ namespace CafeReadConf.Backend.API
             if (userEntity.ContainsKey("firstname") && userEntity.ContainsKey("lastname")){
                 user = _userEntityFactory.CreateUserEntity(
                     userEntity["firstname"].ToString(),
-                    userEntity["lastname"].ToString());
+                    userEntity["lastname"].ToString(),
+                    userEntity["RowKey"].ToString());
             }
 
             //Preparing user entity to be returned
