@@ -95,7 +95,7 @@ namespace CafeReadConf.Backend.API
         {
             _logger.LogInformation("Retrieving user with id: {UserId} in the table : {SourceTable}", userId, _sourceTable);
 
-            HttpResponseData response = null;
+            HttpResponseData response;
 
             if (!userEntity.ContainsKey("firstname") || !userEntity.ContainsKey("lastname")){
                 response = req.CreateResponse(HttpStatusCode.InternalServerError);
