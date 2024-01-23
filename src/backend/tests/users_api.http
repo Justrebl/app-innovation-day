@@ -1,0 +1,30 @@
+@requestUri = "Users"
+@baseAddress = "localhost"
+@port = 7071
+
+###
+
+# Create a user in a table storage configured in the local.settings.json file
+POST http://localhost:7071/api/Users
+Content-Type: application/json
+
+{
+    "firstName": "John",
+    "lastname": "Le plus fort"
+}
+
+###  
+
+#Get the 50 first users
+
+GET http://{{baseAddress}}:{{port}}/api/{{requestUri}}
+
+###
+
+#Get a specific user
+
+GET http://localhost:7071/api/Users/1
+
+###
+
+GET http://localhost:7071/api/Users/

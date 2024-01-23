@@ -400,3 +400,5 @@ FodyWeavers.xsd
 # Whitelist
 # Accept pipeline tmp files
 !.github/**/*.yaml.tmp
+
+__azurite_**
