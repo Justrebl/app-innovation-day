@@ -50,8 +50,6 @@ namespace CafeReadConf.Backend.API
 
             var user = _userEntityFactory.CreateUserEntity(UserEntity.FirstName, UserEntity.LastName);
 
-            var env = Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME");
-
             var newUser = new
             {
                 newUserUrl = $"{req.Url.Scheme}://{req.Url.Authority}/api/Users/{user.RowKey}"
@@ -93,13 +91,16 @@ namespace CafeReadConf.Backend.API
                 partitionKey: "%AZURE_TABLE_PARTITION_KEY%",
                 rowKey: "{userId}",
                 Connection = "AZURE_TABLE_STORAGE_ACCOUNT")] TableEntity userEntity,
-                int userId)
+                string userId)
         {
             _logger.LogInformation("Retrieving user with id: {UserId} in the table : {SourceTable}", userId, _sourceTable);
 
-            var user = _userEntityFactory.CreateUserEntity(
-                userEntity.GetString("FirstName"),
-                 userEntity.GetString("LastName"));
+            UserEntity user = null;
+            if (userEntity.ContainsKey("firstname") && userEntity.ContainsKey("lastname")){
+                user = _userEntityFactory.CreateUserEntity(
+                    userEntity["firstname"].ToString(),
+                    userEntity["lastname"].ToString());
+            }
 
             //Preparing user entity to be returned
             var response = req.CreateResponse(HttpStatusCode.OK);
