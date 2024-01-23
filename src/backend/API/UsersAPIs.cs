@@ -5,15 +5,19 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Azure.Data.Tables;
+using System;
 
 namespace CafeReadConf.Backend.API
 {
-    public class CreateUserOutput{
+    public class CreateUserOutput
+    {
         [TableOutput("%AZURE_TABLE_SOURCE%", Connection = "AZURE_TABLE_STORAGE_ACCOUNT")]
-        public UserEntity User {get;set;}
-        public HttpResponseData Response {get;set;}
+        public UserEntity User { get; set; }
+        public HttpResponseData Response { get; set; }
 
-        public CreateUserOutput(UserEntity user, HttpResponseData response){
+        public CreateUserOutput(UserEntity user, HttpResponseData response)
+        {
             User = user;
             Response = response;
         }
@@ -33,25 +37,53 @@ namespace CafeReadConf.Backend.API
             _userEntityFactory = userEntityFactory;
 
             //Hydrating configurations from environment variables
-            _partitionkey = configuration.GetValue<string>("AZURE_TABLE_PARTITION_KEY");            
+            _partitionkey = configuration.GetValue<string>("AZURE_TABLE_PARTITION_KEY");
             _sourceTable = configuration.GetValue<string>("AZURE_TABLE_SOURCE");
         }
 
         [Function(nameof(CreateUser))]
         public CreateUserOutput CreateUser(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route ="Users")] HttpRequestData req,
-            [FromBody] UserEntity newUser)
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Users")] HttpRequestData req,
+            [FromBody] UserEntity UserEntity)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
+            var user = _userEntityFactory.CreateUserEntity(UserEntity.FirstName, UserEntity.LastName);
+
+            var env = Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME");
+
+            var newUser = new
+            {
+                newUserUrl = $"{req.Url.Scheme}://{req.Url.Authority}/api/Users/{user.RowKey}"
+            };
+
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
-            response.WriteString($"Creating a new user : {newUser.FirstName} {newUser.LastName}");
+            response.WriteString(JsonSerializer.Serialize(newUser));
 
             return new CreateUserOutput(
-                _userEntityFactory.CreateUserEntity(newUser.FirstName, newUser.LastName),
+                user,
                 response);
         }
+
+        // [Function(nameof(GetUsersById))]
+        // public HttpResponseData GetUsersById(
+        //     [HttpTrigger(AuthorizationLevel.Function, "get", Route = "Users/{userId}")] HttpRequestData req,
+        //     [TableInput(
+        //         tableName: "%AZURE_TABLE_SOURCE%",
+        //         partitionKey: "%AZURE_TABLE_PARTITION_KEY%",
+        //         rowKey: "{userId}",
+        //         Connection = "AZURE_TABLE_STORAGE_ACCOUNT")] UserEntity user)
+        // {
+        //     _logger.LogInformation("Retrieving user with id: {UserId} in the table : {SourceTable}", user.RowKey, _sourceTable);
+
+        //     // Preparing user entity to be returned
+        //     var response = req.CreateResponse(HttpStatusCode.OK);
+        //     response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+        //     response.WriteString($"{JsonSerializer.Serialize(user)}");
+
+        //     return response;
+        // }
 
         [Function(nameof(GetUsersById))]
         public HttpResponseData GetUsersById(
@@ -60,16 +92,21 @@ namespace CafeReadConf.Backend.API
                 tableName: "%AZURE_TABLE_SOURCE%",
                 partitionKey: "%AZURE_TABLE_PARTITION_KEY%",
                 rowKey: "{userId}",
-                Connection = "AZURE_TABLE_STORAGE_ACCOUNT")] UserEntity user,
+                Connection = "AZURE_TABLE_STORAGE_ACCOUNT")] TableEntity userEntity,
                 int userId)
         {
             _logger.LogInformation("Retrieving user with id: {UserId} in the table : {SourceTable}", userId, _sourceTable);
-            
+
+            var user = _userEntityFactory.CreateUserEntity(
+                userEntity.GetString("FirstName"),
+                 userEntity.GetString("LastName"));
+
             //Preparing user entity to be returned
             var response = req.CreateResponse(HttpStatusCode.OK);
+
             response.Headers.Add("Content-Type", "application/json; charset=utf-8");
             response.WriteString($"{JsonSerializer.Serialize(user)}");
-            
+
             return response;
         }
 
@@ -80,16 +117,15 @@ namespace CafeReadConf.Backend.API
                 tableName: "%AZURE_TABLE_SOURCE%",
                 partitionKey: "%AZURE_TABLE_PARTITION_KEY%",
                 Connection = "AZURE_TABLE_STORAGE_ACCOUNT",
-                Take = 50)] IEnumerable<UserEntity> users,
-                int userId)
+                Take = 50)] IEnumerable<UserEntity> users)
         {
-            _logger.LogInformation("Retrieving user with id: {UserId} in the table : {SourceTable}",userId, _sourceTable);
-            
+            _logger.LogInformation("Retrieving users in the table : {SourceTable}", _sourceTable);
+
             //Preparing user entity to be returned
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "application/json; charset=utf-8");
             response.WriteString($"{JsonSerializer.Serialize(users)}");
-            
+
             return response;
         }
     }

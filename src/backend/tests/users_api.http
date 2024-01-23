@@ -23,7 +23,7 @@ GET http://{{baseAddress}}:{{port}}/api/{{requestUri}}
 
 #Get a specific user
 
-GET http://localhost:7071/api/Users/1
+GET http://localhost:7071/api/Users/0
 
 ###
 

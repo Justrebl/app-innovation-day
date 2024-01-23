@@ -1,35 +1,54 @@
 using System.Text.Json.Serialization;
+using System.Text.Json;
 using Azure;
 using Azure.Data.Tables;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace CafeReadConf.Backend.Models
 {
     public class UserEntity : ITableEntity
     {
-        [JsonPropertyName("firstName")]
+        [JsonPropertyName("firstname")]
         public string FirstName { get; set; }
 
         [JsonPropertyName("lastname")]
-        [JsonInclude]
         public string LastName { get; set; }
 
         [JsonPropertyName("partitionkey")]
-        [JsonInclude]
         public string PartitionKey { get; set; }
 
         [JsonPropertyName("rowkey")]
-        public string? RowKey { get; set; }
+        public string RowKey { get; set; }
 
         [JsonPropertyName("timestamp")]
-        [JsonInclude]
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public DateTimeOffset? Timestamp { get; set; }
 
-        [JsonPropertyName("etag")]
-        [JsonInclude]
+        [JsonPropertyName("odata.etag")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public ETag ETag { get; set; }
 
-        public UserEntity(string firstName, string lastName, string partitionKey, string? rowKey, DateTimeOffset? timestamp, ETag eTag)
+        public UserEntity() { }
+
+        public UserEntity(string partitionKey, string rowKey)
+        {
+            PartitionKey = partitionKey;
+            RowKey = rowKey;
+        }
+
+        public UserEntity(string firstName, string lastName, string partitionKey, string rowKey)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            PartitionKey = partitionKey;
+            RowKey = rowKey;
+        }
+
+        public UserEntity(string firstName, string lastName, string partitionKey, string rowKey,
+        DateTimeOffset? timestamp,
+        ETag eTag)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -41,25 +60,25 @@ namespace CafeReadConf.Backend.Models
     }
 
     public class UserEntityFactory
-{
-    private readonly IConfiguration _configuration;
-
-    public UserEntityFactory(IConfiguration configuration)
     {
-        _configuration = configuration;
-    }
+        private readonly IConfiguration _configuration;
 
-    public UserEntity CreateUserEntity(string firstName, string lastName, string? rowKey = null, DateTimeOffset? timestamp = null, ETag? eTag = null)
-    {
-        return new UserEntity(
-                firstName, 
-                lastName, 
-                _configuration.GetValue<string>("AZURE_TABLE_PARTITION_KEY"),
-                rowKey ?? System.Guid.NewGuid().ToString(),
-                timestamp ?? DateTimeOffset.Now,
-                eTag ?? ETag.All);
+        public UserEntityFactory(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        public UserEntity CreateUserEntity(string firstName, string lastName, string? rowKey = null, DateTimeOffset? timestamp = null, ETag? eTag = null)
+        {
+            return new UserEntity(
+                    firstName,
+                    lastName,
+                    _configuration.GetValue<string>("AZURE_TABLE_PARTITION_KEY"),
+                    rowKey ?? System.Guid.NewGuid().ToString(),
+                    timestamp ?? DateTimeOffset.Now,
+                    ETag.All);
+        }
     }
-}
 
 }
 
