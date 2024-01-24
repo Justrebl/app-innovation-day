@@ -10,16 +10,16 @@ namespace CafeReadConf.Backend.Models
 {
     public class UserEntity : ITableEntity
     {
-        [JsonPropertyName("Firstname")]
+        [JsonPropertyName("FirstName")]
         public string FirstName { get; set; }
 
-        [JsonPropertyName("Lastname")]
+        [JsonPropertyName("LastName")]
         public string LastName { get; set; }
 
-        [JsonPropertyName("Partitionkey")]
+        [JsonPropertyName("PartitionKey")]
         public string PartitionKey { get; set; }
 
-        [JsonPropertyName("Rowkey")]
+        [JsonPropertyName("RowKey")]
         public string RowKey { get; set; }
 
         [JsonPropertyName("Timestamp")]
@@ -29,22 +29,6 @@ namespace CafeReadConf.Backend.Models
         [JsonPropertyName("odata.etag")]
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public ETag ETag { get; set; }
-
-        public UserEntity() { }
-
-        public UserEntity(string partitionKey, string rowKey)
-        {
-            PartitionKey = partitionKey;
-            RowKey = rowKey;
-        }
-
-        public UserEntity(string firstName, string lastName, string partitionKey, string rowKey)
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            PartitionKey = partitionKey;
-            RowKey = rowKey;
-        }
 
         public UserEntity(string firstName, string lastName, string partitionKey, string rowKey,
         DateTimeOffset? timestamp,
