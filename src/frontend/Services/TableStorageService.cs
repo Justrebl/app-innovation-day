@@ -1,35 +1,42 @@
 ﻿using Azure;
 using Azure.Data.Tables;
 using Azure.Identity;
+using CafeReadConf.Frontend.Models;
+using CafeReadConf.Frontend.Service;
+using Microsoft.Extensions.Configuration;
 using System;
 
 namespace CafeReadConf
 {
-    public class TableStorageService
+    public class TableStorageService : IUserService
     {
         private const string TableName = "users";
-        private readonly string _connString;
+        private readonly string? _tableStorageConnectionString;
+        private readonly string? _tableStorageUri;
 
-        public TableStorageService(string connString)
+        public TableStorageService(IConfiguration configuration)
         {
-            _connString = connString;
+            _tableStorageConnectionString = configuration.GetValue<string>("secret");
+            _tableStorageUri = configuration.GetValue<string>("AZURE_TABLE_STORAGE_URI");
         }
 
         /// <summary>
         /// Get TableClient from Azure Table Storage
         /// </summary>
         /// <returns></returns>
-        private async Task<TableClient> GetTableClient()
+        private TableClient GetTableClient()
         {
             TableServiceClient serviceClient;
 
-            if(string.IsNullOrEmpty(_connString)) // mode MSI
+            if(string.IsNullOrEmpty(_tableStorageConnectionString)) // mode MSI
             {
-                serviceClient = new TableServiceClient(new Uri("https://stoappinnoday.table.core.windows.net/"), new DefaultAzureCredential());
+                serviceClient = new TableServiceClient(
+                    new Uri(_tableStorageUri),
+                    new DefaultAzureCredential());
             }
             else // mode connection string
             {
-                serviceClient = new TableServiceClient(_connString);
+                serviceClient = new TableServiceClient(_tableStorageConnectionString);
             }
 
             var tableClient = serviceClient.GetTableClient(TableName);
@@ -41,18 +48,14 @@ namespace CafeReadConf
         /// Get all users from Azure Table Storage
         /// </summary>
         /// <returns></returns>
-        public async Task<List<User>> GetUsers()
+        public async Task<List<UserFromApi>> GetUsers()
         {
-            var users = new List<User>();
+            var users = new List<UserFromApi>();
 
             try
             {
-                var tableClient = await GetTableClient();
-                Pageable<User> queryResultsFilter = tableClient.Query<User>();
-                foreach (User qEntity in queryResultsFilter)
-                {
-                    users.Add(qEntity);
-                }
+                var tableClient = GetTableClient();
+                users = tableClient.Query<UserFromApi>().ToList();
             }
             catch (Exception ex)
             {

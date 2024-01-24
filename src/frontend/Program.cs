@@ -1,8 +1,22 @@
+using CafeReadConf;
+using CafeReadConf.Frontend.Service;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
+
+//Conditional service injection
+if( string.IsNullOrEmpty(builder.Configuration["BACKEND_API_URL"]) )
+{
+    builder.Services.AddSingleton<IUserService, TableStorageService>();
+}
+else
+{
+    builder.Services.AddSingleton<IUserService, TableStorageService>();
+}
+builder.Services.AddSingleton<IUserService, TableStorageService>();
 
 var app = builder.Build();
 

@@ -6,23 +6,23 @@ using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
-namespace CafeReadConf.Backend.Models
+namespace CafeReadConf.Frontend.Models
 {
-    public class UserEntity : ITableEntity
+    public class UserFromApi : ITableEntity
     {
-        [JsonPropertyName("Firstname")]
+        [JsonPropertyName("firstname")]
         public string FirstName { get; set; }
 
-        [JsonPropertyName("Lastname")]
+        [JsonPropertyName("lastname")]
         public string LastName { get; set; }
 
-        [JsonPropertyName("Partitionkey")]
+        [JsonPropertyName("partitionkey")]
         public string PartitionKey { get; set; }
 
-        [JsonPropertyName("Rowkey")]
+        [JsonPropertyName("rowkey")]
         public string RowKey { get; set; }
 
-        [JsonPropertyName("Timestamp")]
+        [JsonPropertyName("timestamp")]
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public DateTimeOffset? Timestamp { get; set; }
 
@@ -30,23 +30,9 @@ namespace CafeReadConf.Backend.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public ETag ETag { get; set; }
 
-        public UserEntity() { }
+        public UserFromApi() { }
 
-        public UserEntity(string partitionKey, string rowKey)
-        {
-            PartitionKey = partitionKey;
-            RowKey = rowKey;
-        }
-
-        public UserEntity(string firstName, string lastName, string partitionKey, string rowKey)
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            PartitionKey = partitionKey;
-            RowKey = rowKey;
-        }
-
-        public UserEntity(string firstName, string lastName, string partitionKey, string rowKey,
+        public UserFromApi(string firstName, string lastName, string partitionKey, string rowKey,
         DateTimeOffset? timestamp,
         ETag eTag)
         {
@@ -68,9 +54,9 @@ namespace CafeReadConf.Backend.Models
             _configuration = configuration;
         }
 
-        public UserEntity CreateUserEntity(string firstName, string lastName, string? partitionKey = null, string? rowKey = null, DateTimeOffset? timestamp = null, ETag? eTag = null)
+        public UserFromApi CreateUserEntity(string firstName, string lastName, string? partitionKey = null, string? rowKey = null, DateTimeOffset? timestamp = null, ETag? eTag = null)
         {
-            return new UserEntity(
+            return new UserFromApi(
                     firstName,
                     lastName,
                     partitionKey ?? _configuration.GetValue<string>("AZURE_TABLE_PARTITION_KEY"),
