@@ -20,30 +20,6 @@ namespace CafeReadConf
             _httpClient = httpClientFactory.CreateClient("BackendApi");
         }
 
-        // /// <summary>
-        // /// Get TableClient from Azure Table Storage
-        // /// </summary>
-        // /// <returns></returns>
-        // private TableClient GetTableClient()
-        // {
-        //     TableServiceClient serviceClient;
-
-        //     if(string.IsNullOrEmpty(_tableStorageConnectionString)) // mode MSI
-        //     {
-        //         serviceClient = new TableServiceClient(
-        //             new Uri(_tableStorageUri),
-        //             new DefaultAzureCredential());
-        //     }
-        //     else // mode connection string
-        //     {
-        //         serviceClient = new TableServiceClient(_tableStorageConnectionString);
-        //     }
-
-        //     var tableClient = serviceClient.GetTableClient(TableName);
-        //     return tableClient;
-        // }
-
-
         /// <summary>
         /// Get all users from Azure Table Storage
         /// </summary>

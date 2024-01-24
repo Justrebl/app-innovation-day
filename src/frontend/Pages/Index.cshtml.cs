@@ -1,13 +1,6 @@
-using Azure.Data.Tables;
-using Azure;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Collections.Concurrent;
-using System.Configuration;
 using CafeReadConf.Frontend.Models;
 using CafeReadConf.Frontend.Service;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace CafeReadConf.Pages
 {
@@ -41,15 +34,5 @@ namespace CafeReadConf.Pages
         {
             return await _userService.GetUsers();
         }
-
-        // private string GetConfig(string key)
-        // {
-        //     string value =  System.Configuration.ConfigurationManager.AppSettings[key];
-        //     if(string.IsNullOrEmpty(value))
-        //     {
-        //         value = Environment.GetEnvironmentVariable(key);
-        //     }
-        //     return value;
-        // }
     }
 }
