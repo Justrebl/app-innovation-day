@@ -8,17 +8,9 @@ using System;
 
 namespace CafeReadConf
 {
-    public class TableStorageService : IUserService
+    public class UserServiceTableStorage : IUserService
     {
-        private const string TableName = "users";
-        private readonly string? _tableStorageConnectionString;
-        private readonly string? _tableStorageUri;
-
-        public TableStorageService(IConfiguration configuration)
-        {
-            _tableStorageConnectionString = configuration.GetValue<string>("secret");
-            _tableStorageUri = configuration.GetValue<string>("AZURE_TABLE_STORAGE_URI");
-        }
+        public UserServiceTableStorage(IConfiguration configuration) : base(configuration){}
 
         /// <summary>
         /// Get TableClient from Azure Table Storage
@@ -28,18 +20,18 @@ namespace CafeReadConf
         {
             TableServiceClient serviceClient;
 
-            if(string.IsNullOrEmpty(_tableStorageConnectionString)) // mode MSI
+            if(string.IsNullOrEmpty(this._tableStorageConnectionString)) // mode MSI
             {
                 serviceClient = new TableServiceClient(
-                    new Uri(_tableStorageUri),
+                    new Uri(this._tableStorageUri),
                     new DefaultAzureCredential());
             }
             else // mode connection string
             {
-                serviceClient = new TableServiceClient(_tableStorageConnectionString);
+                serviceClient = new TableServiceClient(this._tableStorageConnectionString);
             }
 
-            var tableClient = serviceClient.GetTableClient(TableName);
+            var tableClient = serviceClient.GetTableClient(this._tableName);
             return tableClient;
         }
 
@@ -48,14 +40,14 @@ namespace CafeReadConf
         /// Get all users from Azure Table Storage
         /// </summary>
         /// <returns></returns>
-        public async Task<List<UserFromApi>> GetUsers()
+        public override async Task<List<UserEntity>> GetUsers()
         {
-            var users = new List<UserFromApi>();
+            var users = new List<UserEntity>();
 
             try
             {
                 var tableClient = GetTableClient();
-                users = tableClient.Query<UserFromApi>().ToList();
+                users = tableClient.Query<UserEntity>().ToList();
             }
             catch (Exception ex)
             {

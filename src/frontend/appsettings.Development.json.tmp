@@ -6,7 +6,7 @@
       "Microsoft.AspNetCore": "Warning"
     }
   },
-  "secret": "DefaultEndpointsProtocol=https;AccountName=stoappinnoday;AccountKey=Mb9x7U5QmMclkjjMtvVabO7FzThE1Ylk2mKmhh5phZjPWtjMxgh8gpVN5/m7csDTnufoDQw0HNeO+AStX4xvrA==;EndpointSuffix=core.windows.net",
+  "secret": "",
   "BACKEND_API_URL": "http://localhost:7071/",
   "AZURE_TABLE_PARTITION_KEY":"users",
   "AZURE_TABLE_STORAGE_URI": "https://stoappinnoday.table.core.windows.net",

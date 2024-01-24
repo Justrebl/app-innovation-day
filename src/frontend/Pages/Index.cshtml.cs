@@ -13,7 +13,7 @@ namespace CafeReadConf.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         public string? Secret { get; set; }
-        public List<UserFromApi> Users { get; set; }
+        public List<UserEntity> Users { get; set; }
         public IUserService _userService { get; set; }
 
         public void OnGet(){}
