@@ -5,12 +5,13 @@ using CafeReadConf.Frontend.Models;
 using CafeReadConf.Frontend.Service;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Net;
 using System.Text.Json;
 
 namespace CafeReadConf
 {
     public class UserServiceAPI : IUserService
-    {        
+    {
         private readonly HttpClient _httpClient;
         public UserServiceAPI(
             IConfiguration configuration,
@@ -52,7 +53,14 @@ namespace CafeReadConf
             var users = new List<UserEntity>();
             try
             {
-                var userApiResult = await _httpClient.GetAsync("api/users");
+                var userApiResult = await _httpClient.GetAsync("/api/users");
+
+                if (userApiResult.StatusCode != HttpStatusCode.OK)
+                {
+                    Console.WriteLine($"Error: {userApiResult.StatusCode}");
+                    return users;
+                }
+
                 users = JsonSerializer.Deserialize<List<UserEntity>>(
                     await userApiResult.Content.ReadAsStringAsync());
             }
@@ -60,7 +68,7 @@ namespace CafeReadConf
             {
                 Console.WriteLine(ex.Message);
             }
-            
+
             return users;
         }
     }

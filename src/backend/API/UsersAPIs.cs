@@ -78,7 +78,8 @@ namespace CafeReadConf.Backend.API
 
             HttpResponseData response;
 
-            if (!userEntity.ContainsKey("firstname") || !userEntity.ContainsKey("lastname")){
+            if (!userEntity.ContainsKey("firstname") || !userEntity.ContainsKey("lastname"))
+            {
                 response = req.CreateResponse(HttpStatusCode.InternalServerError);
                 response.Headers.Add("Content-Type", "plain/text; charset=utf-8");
                 response.WriteString($"Internal Server Error : user {userId} cannot be fetched");
@@ -113,7 +114,8 @@ namespace CafeReadConf.Backend.API
             //Preparing user entity to be returned
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "application/json; charset=utf-8");
-            response.WriteString($"{JsonSerializer.Serialize(users)}");
+            var usersList = JsonSerializer.Serialize(users);
+            response.WriteString(usersList);
 
             return response;
         }

@@ -6,6 +6,8 @@ using System.Collections.Concurrent;
 using System.Configuration;
 using CafeReadConf.Frontend.Models;
 using CafeReadConf.Frontend.Service;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace CafeReadConf.Pages
 {
@@ -16,9 +18,7 @@ namespace CafeReadConf.Pages
         public List<UserEntity> Users { get; set; }
         public IUserService _userService { get; set; }
 
-        public void OnGet(){}
-
-        public IndexModel(ILogger<IndexModel> logger, 
+        public IndexModel(ILogger<IndexModel> logger,
         IUserService userService,
         IConfiguration configuration)
         {
@@ -26,16 +26,20 @@ namespace CafeReadConf.Pages
             _userService = userService;
 
             Secret = configuration.GetValue<string>("secret");
+        }
 
-            ReadItems();
+        public async Task OnGetAsync()
+        {
+
+            Users = await ReadItems();
         }
 
         /// <summary>
-        /// Read data from Azure Table Storage
+        /// Read data from Azure Table Storage or the API based on the configuration
         /// </summary>
-        private async void ReadItems()
+        private async Task<List<UserEntity>> ReadItems()
         {
-            Users = await _userService.GetUsers();
+            return await _userService.GetUsers();
         }
 
         // private string GetConfig(string key)

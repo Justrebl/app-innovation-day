@@ -10,16 +10,16 @@ namespace CafeReadConf.Frontend.Models
 {
     public class UserEntity : ITableEntity
     {
-        [JsonPropertyName("firstname")]
+        [JsonPropertyName("FirstName")]
         public string FirstName { get; set; }
 
-        [JsonPropertyName("lastname")]
+        [JsonPropertyName("LastName")]
         public string LastName { get; set; }
 
-        [JsonPropertyName("partitionkey")]
+        [JsonPropertyName("PartitionKey")]
         public string PartitionKey { get; set; }
 
-        [JsonPropertyName("rowkey")]
+        [JsonPropertyName("RowKey")]
         public string RowKey { get; set; }
 
         [JsonPropertyName("timestamp")]

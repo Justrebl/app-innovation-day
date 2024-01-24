@@ -10,7 +10,7 @@ namespace CafeReadConf
 {
     public class UserServiceTableStorage : IUserService
     {
-        public UserServiceTableStorage(IConfiguration configuration) : base(configuration){}
+        public UserServiceTableStorage(IConfiguration configuration) : base(configuration) { }
 
         /// <summary>
         /// Get TableClient from Azure Table Storage
@@ -20,7 +20,7 @@ namespace CafeReadConf
         {
             TableServiceClient serviceClient;
 
-            if(string.IsNullOrEmpty(this._tableStorageConnectionString)) // mode MSI
+            if (string.IsNullOrEmpty(this._tableStorageConnectionString)) // mode MSI
             {
                 serviceClient = new TableServiceClient(
                     new Uri(this._tableStorageUri),
@@ -53,7 +53,7 @@ namespace CafeReadConf
             {
                 Console.WriteLine(ex.Message);
             }
-            
+
             return users;
         }
     }
