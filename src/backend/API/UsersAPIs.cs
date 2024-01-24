@@ -64,28 +64,9 @@ namespace CafeReadConf.Backend.API
                 response);
         }
 
-        // [Function(nameof(GetUsersById))]
-        // public HttpResponseData GetUsersById(
-        //     [HttpTrigger(AuthorizationLevel.Function, "get", Route = "Users/{userId}")] HttpRequestData req,
-        //     [TableInput(
-        //         tableName: "%AZURE_TABLE_SOURCE%",
-        //         partitionKey: "%AZURE_TABLE_PARTITION_KEY%",
-        //         rowKey: "{userId}",
-        //         Connection = "AZURE_TABLE_STORAGE_ACCOUNT")] UserEntity user)
-        // {
-        //     _logger.LogInformation("Retrieving user with id: {UserId} in the table : {SourceTable}", user.RowKey, _sourceTable);
-
-        //     // Preparing user entity to be returned
-        //     var response = req.CreateResponse(HttpStatusCode.OK);
-        //     response.Headers.Add("Content-Type", "application/json; charset=utf-8");
-        //     response.WriteString($"{JsonSerializer.Serialize(user)}");
-
-        //     return response;
-        // }
-
         [Function(nameof(GetUsersById))]
         public HttpResponseData GetUsersById(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "Users/{userId}")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Users/{userId}")] HttpRequestData req,
             [TableInput(
                 tableName: "%AZURE_TABLE_SOURCE%",
                 partitionKey: "%AZURE_TABLE_PARTITION_KEY%",

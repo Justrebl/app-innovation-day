@@ -1,6 +1,6 @@
 {
-  "name": "ASP.NET Core 6 Dev Container",
-  "image": "mcr.microsoft.com/devcontainers/dotnet:6.0-jammy",
+  "name": "ASP.NET Core 8 Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0-jammy",
   "features": {
     "ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {},
     "azure-cli": {
@@ -9,7 +9,7 @@
   },
   "customizations": {
     "prompt": "dotnet: ",
-    "welcomeBanner": "Welcome to .NET 6!",
+    "welcomeBanner": "Welcome to .NET 8!",
     "vscode": {
       "extensions": [
         "ms-dotnettools.csharp",
@@ -32,5 +32,5 @@
     }
   },
   "forwardPorts": [5000, 5001, 7071, 10000, 10001, 10002],
-  "postCreateCommand": "cd ./src/frontend && dotnet restore && cd ../backend && dotnet restore"
+  "postCreateCommand": "cd ./src/frontend && dotnet dev-certs https --trust && dotnet restore && cd ../backend && dotnet restore"
 }
