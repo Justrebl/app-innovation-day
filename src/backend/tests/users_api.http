@@ -23,8 +23,13 @@ GET http://{{baseAddress}}:{{port}}/api/{{requestUri}}
 
 #Get a specific user
 
-GET http://localhost:7071/api/Users/fa556860-d592-44db-bd8a-ba062c005911
+GET http://localhost:7071/api/Users/1
 
 ###
 
 GET http://localhost:7071/api/Users/
+
+
+###
+
+POST https://login.microsoftonline.com/dbf66fc6-f491-4387-b638-101810058f9c/oauth2/token?api-version=1.0
