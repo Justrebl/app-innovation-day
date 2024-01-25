@@ -22,6 +22,7 @@ else
 {
     builder.Services.AddHttpClient("ApiBaseAddress", client =>
     {
+
         client.BaseAddress = new Uri(config["BACKEND_API_URL"]);
     });
     // If backend API URL is provided, we assume we are connecting to the Azure Function backend API

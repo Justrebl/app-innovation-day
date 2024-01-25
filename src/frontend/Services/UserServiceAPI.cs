@@ -21,6 +21,7 @@ namespace CafeReadConf
             UserEntityFactory userEntityFactory) : base(configuration, logger, userEntityFactory)
         {
             _httpClient = httpClientFactory.CreateClient("ApiBaseAddress");
+
         }
 
         /// <summary>
@@ -71,5 +72,6 @@ namespace CafeReadConf
                 _logger.LogError(ex.Message);
             }
         }
+
     }
 }

@@ -25,7 +25,6 @@ namespace CafeReadConf.Frontend.Service
         /// </summary>
         /// <returns></returns>
         public abstract Task<List<UserEntity>> GetUsers();
-
         public abstract Task AddUser(Usermodel user);
     }
 }

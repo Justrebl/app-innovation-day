@@ -8,6 +8,7 @@ namespace CafeReadConf.Pages
     {
         // Services DI 
         private readonly ILogger<IndexModel> _logger;
+
         public IUserService _userService { get; set; }
         private readonly IConfiguration _configuration;
 

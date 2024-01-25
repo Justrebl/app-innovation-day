@@ -55,7 +55,6 @@ namespace CafeReadConf.Pages.Admin
                 }
             }
 
-
             return Page();
         }
     }

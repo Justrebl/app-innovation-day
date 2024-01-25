@@ -10,10 +10,12 @@ namespace CafeReadConf
 {
     public class UserServiceTableStorage : IUserService
     {
+
         public UserServiceTableStorage(
             IConfiguration configuration,
             ILogger<UserServiceTableStorage> logger,
             UserEntityFactory userEntityFactory) : base(configuration, logger, userEntityFactory) { }
+
 
         /// <summary>
         /// Get TableClient from Azure Table Storage
@@ -57,7 +59,7 @@ namespace CafeReadConf
 
             return users;
         }
-
+        
         /// <summary>
         /// Add a user to Azure Table Storage
         /// </summary>
@@ -68,6 +70,5 @@ namespace CafeReadConf
         {
             throw new NotImplementedException();
         }
-
     }
 }
