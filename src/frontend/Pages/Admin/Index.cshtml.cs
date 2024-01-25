@@ -9,24 +9,30 @@ namespace CafeReadConf.Pages.Admin
 {
     public class IndexModel : PageModel
     {
+        //Services DI
         private readonly ILogger<IndexModel> _logger;
         private IUserService _userService;
         private IConfiguration _configuration;
-        public string? Secret { get; set; }
+
+        // Properties for the view
+        public string? Secret { get => _configuration.GetValue<string>("secret"); }
+        public bool IsApiUrlSet { get => !string.IsNullOrEmpty(this._configuration.GetValue<string>("BACKEND_API_URL")); }
+
+        //Model Binding
         [BindProperty]
         public Usermodel Input { get; set; }
-
-        public PageResult OnGet()
-        {
-            return Page();
-        }
 
         public IndexModel(ILogger<IndexModel> logger, IUserService userService, IConfiguration configuration)
         {
             _logger = logger;
             _userService = userService;
             _configuration = configuration;
-            Secret = _configuration.GetValue<string>("secret");
+            Input = new Usermodel();
+        }
+
+        public PageResult OnGet()
+        {
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
