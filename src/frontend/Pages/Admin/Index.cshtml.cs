@@ -1,12 +1,19 @@
+using System.Security.Claims;
 using CafeReadConf.Frontend.Models;
 using CafeReadConf.Frontend.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Identity.Web;
 using Microsoft.Extensions.Azure;
 using Microsoft.Net.Http.Headers;
 
 namespace CafeReadConf.Pages.Admin
 {
+    [Authorize(
+        // AuthenticationSchemes = "EasyAuth",
+        Policy = "RequireAdministrator")]
     public class IndexModel : PageModel
     {
         //Services DI
@@ -15,7 +22,7 @@ namespace CafeReadConf.Pages.Admin
         private IConfiguration _configuration;
 
         // Properties for the view
-        public string? Secret { get => _configuration.GetValue<string>("secret"); }
+        public string? Secret { get => _configuration.GetValue<string>("SECRET"); }
         public bool IsApiUrlSet { get => !string.IsNullOrEmpty(this._configuration.GetValue<string>("BACKEND_API_URL")); }
 
         //Model Binding
