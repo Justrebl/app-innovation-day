@@ -20,7 +20,6 @@ namespace CafeReadConf.Pages.Admin
         private IConfiguration _configuration;
 
         // Properties for the view
-        public string? Secret { get => _configuration.GetValue<string>("SECRET"); }
         public bool IsApiUrlSet { get => !string.IsNullOrEmpty(this._configuration.GetValue<string>("BACKEND_API_URL")); }
 
         //Model Binding
