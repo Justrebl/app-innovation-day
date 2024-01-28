@@ -47,8 +47,9 @@ namespace CafeReadConf.Configure
             {
                 services.AddHttpClient("ApiBaseAddress", client =>
                 {
-
                     client.BaseAddress = new Uri(config["BACKEND_API_URL"]);
+                    client.DefaultRequestHeaders.Add("Accept", "application/json");
+                    client.DefaultRequestHeaders.Add("User-Agent", "AppInno Frontend");
                 });
                 // If backend API URL is provided, we assume we are connecting to the Azure Function backend API
                 services.AddSingleton<IUserService, UserServiceAPI>();

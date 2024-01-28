@@ -27,10 +27,11 @@ namespace CafeReadConf.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            ClaimsPrincipal currentUser = this.User;
-            ViewData["UserName"] = currentUser.Identity.Name;
-            ViewData["UserEmail"] = currentUser.FindFirst(ClaimTypes.Email)?.Value;
-            ViewData["UserRoles"] = currentUser.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+            // ClaimsPrincipal currentUser = this.User;
+            // ViewData["UserName"] = currentUser.Identity.Name;
+            // ViewData["UserEmail"] = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+            // ViewData["UserRoles"] = currentUser.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+
             Users = await ReadItems();
             return Page();
         }

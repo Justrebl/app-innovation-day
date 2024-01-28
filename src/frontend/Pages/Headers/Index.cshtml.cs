@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CafeReadConf.Pages
+namespace CafeReadConf.Pages.Headers
 {
-    public class HeadersModel : PageModel
+    public class IndexModel : PageModel
     {
         // Services DI 
-        private readonly ILogger<HeadersModel> _logger;
+        private readonly ILogger<IndexModel> _logger;
 
-        public HeadersModel() { }
+        public IndexModel() { }
 
         public async Task<IActionResult> OnGetAsync()
         {

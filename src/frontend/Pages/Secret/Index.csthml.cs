@@ -9,9 +9,8 @@ using Microsoft.Identity.Web;
 using Microsoft.Extensions.Azure;
 using Microsoft.Net.Http.Headers;
 
-namespace CafeReadConf.Pages.Admin
+namespace CafeReadConf.Pages.Secret
 {
-    [Authorize(Policy = "RequireAdministrator")]
     public class IndexModel : PageModel
     {
         //Services DI

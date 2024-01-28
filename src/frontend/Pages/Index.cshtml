@@ -6,28 +6,7 @@
 
 <div class="text-center">
     <img src="~/img/logo.jpeg" width="200px" />
-
-    <div class="row">
-        <div class="col-md-6">UserName: </div>
-        <div class="col-md-6">
-            @ViewData["UserName"]
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">Email: </div>
-        <div class="col-md-6">
-            @ViewData["UserEmail"]
-        </div>
-    </div>
-    @foreach (var role in ViewData["UserRoles"] as List<string>)
-{
-    <div class="row">
-        <div class="col-md-6">Role: </div>
-        <div class="col-md-6">
-            @role
-        </div>
-    </div>
-}
+    
     @if (Model.Users == null || Model.Users.Count == 0)
     {
         <table id="users" style="width:500px">

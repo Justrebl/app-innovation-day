@@ -13,6 +13,7 @@ namespace CafeReadConf.Configure
             }
 
             app.UseDeveloperExceptionPage();
+            app.UseMiddleware<PopulateClaims>();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
