@@ -15,6 +15,7 @@ namespace CafeReadConf.Pages
         private readonly IConfiguration _configuration;
 
         public List<UserEntity> Users { get; set; }
+        public string? Secret { get => _configuration.GetValue<string>("SECRET"); }
 
         public IndexModel(ILogger<IndexModel> logger,
         IUserService userService,
